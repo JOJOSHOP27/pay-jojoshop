@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAYMENT BY JOJOSHOP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #7B2CBF;
+            --secondary: #9D4EDD;
+            --accent: #E0AAFF;
+            --dark: #212529;
+            --light: #F8F9FA;
+            --success: #52B788;
+            --error: #EF233C;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+        }
+
+        body {
+            background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+            will-change: transform;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 24px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            animation: fadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            transform-style: preserve-3d;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 28px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .header h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .header p {
+            font-size: 1.05rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+            font-weight: 300;
+        }
+
+        .content {
+            padding: 30px;
+            position: relative;
+        }
+
+        .payment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .payment-card {
+            background: white;
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            will-change: transform;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .payment-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent);
+        }
+
+        .payment-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(123, 44, 191, 0.03) 0%, rgba(157, 78, 221, 0.03) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .payment-card:hover::before {
+            opacity: 1;
+        }
+
+        .payment-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .payment-icon {
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            margin-right: 16px;
+            font-size: 1.6rem;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .payment-card:hover .payment-icon {
+            transform: scale(1.1);
+        }
+
+        .dana .payment-icon {
+            background: linear-gradient(135deg, #04B4F7 0%, #0496D4 100%);
+        }
+
+        .gopay .payment-icon {
+            background: linear-gradient(135deg, #00AA13 0%, #008710 100%);
+        }
+
+        .ovo .payment-icon {
+            background: linear-gradient(135deg, #4C2A86 0%, #3A1F6B 100%);
+        }
+
+        .qris .payment-icon {
+            background: linear-gradient(135deg, #FF5F6D 0%, #FF3D4A 100%);
+        }
+
+        .payment-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dark);
+            line-height: 1.3;
+        }
+
+        .payment-details {
+            margin-top: 20px;
+        }
+
+        .payment-number {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 16px;
+            word-break: break-all;
+            padding: 12px 16px;
+            background: rgba(123, 44, 191, 0.05);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 1px dashed rgba(123, 44, 191, 0.2);
+        }
+
+        .payment-number:hover {
+            background: rgba(123, 44, 191, 0.08);
+            border-color: var(--primary);
+        }
+
+        .payment-number::after {
+            content: 'Click to copy';
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8rem;
+            color: var(--primary);
+            opacity: 0.7;
+            font-weight: 400;
+        }
+
+        .copy-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin-top: 12px;
+            box-shadow: 0 4px 12px rgba(123, 44, 191, 0.2);
+            will-change: transform;
+        }
+
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(123, 44, 191, 0.3);
+        }
+
+        .copy-btn:active {
+            transform: translateY(0);
+        }
+
+        .copy-btn i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        .qris-image-container {
+            position: relative;
+            margin-top: 16px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .qris-image-container:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .qris-image {
+            width: 100%;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .qris-image-container:hover .qris-image {
+            transform: scale(1.03);
+        }
+
+        .instructions {
+            background: rgba(123, 44, 191, 0.03);
+            padding: 24px;
+            border-radius: 16px;
+            margin-top: 32px;
+            border-left: 4px solid var(--primary);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(123, 44, 191, 0.1);
+        }
+
+        .instructions h3 {
+            color: var(--primary);
+            margin-bottom: 14px;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .instructions h3 i {
+            margin-right: 10px;
+        }
+
+        .instructions ol {
+            padding-left: 22px;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+            color: var(--dark);
+            line-height: 1.6;
+            position: relative;
+        }
+
+        .instructions li::marker {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 22px;
+            color: var(--dark);
+            opacity: 0.8;
+            font-size: 0.92rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        /* Floating animation for special effect */
+        .floating {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        /* Copy notification */
+        .copy-notification {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            background: var(--success);
+            color: white;
+            padding: 16px 26px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(82, 183, 136, 0.3);
+            z-index: 1000;
+            transform: translateX(150%);
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+            display: flex;
+            align-items: center;
+            will-change: transform;
+        }
+
+        .copy-notification.show {
+            transform: translateX(0);
+        }
+
+        .copy-notification i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .header p {
+                font-size: 1rem;
+            }
+            
+            .payment-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .content {
+                padding: 24px;
+            }
+            
+            .payment-number::after {
+                content: '';
+                display: none;
+            }
+            
+            .copy-notification {
+                top: auto;
+                bottom: 24px;
+                right: 24px;
+                left: 24px;
+                transform: translateY(150%);
+            }
+            
+            .copy-notification.show {
+                transform: translateY(0);
+            }
+        }
+
+        /* Special glow effect */
+        .glow {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(157, 78, 221, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="glow" style="top: -30px; right: -30px;"></div>
+            <div class="glow" style="bottom: -40px; left: -20px;"></div>
+            <h1>PAYMENT BY JOJOSHOP</h1>
+            <p>Complete your purchase with your preferred payment method</p>
+        </div>
+        
+        <div class="content">
+            <div class="payment-grid">
+                <!-- DANA -->
+                <div class="payment-card dana floating">
+                    <div class="payment-header">
+                        <div class="payment-icon">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="payment-title">DANA Payment</div>
+                    </div>
+                    <div class="payment-details">
+                        <div class="payment-number" onclick="copyToClipboard('minat? makanya buy', 'DANA')">
+                            minat? makanya buy
+                        </div>
+                        <button class="copy-btn" onclick="copyToClipboard('minat? makanya buy', 'DANA')">
+                            <i class="fas fa-copy"></i> Copy DANA Info
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- GoPay -->
+                <div class="payment-card gopay floating" style="animation-delay: 0.2s">
+                    <div class="payment-header">
+                        <div class="payment-icon">
+                            <i class="fab fa-google-pay"></i>
+                        </div>
+                        <div class="payment-title">GoPay Payment</div>
+                    </div>
+                    <div class="payment-details">
+                        <div class="payment-number" onclick="copyToClipboard('minat? makanya buy', 'GoPay')">
+                            minat? makanya buy
+                        </div>
+                        <button class="copy-btn" onclick="copyToClipboard('minat? makanya buy', 'GoPay')">
+                            <i class="fas fa-copy"></i> Copy GoPay Info
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- OVO -->
+                <div class="payment-card ovo floating" style="animation-delay: 0.4s">
+                    <div class="payment-header">
+                        <div class="payment-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="payment-title">OVO Payment</div>
+                    </div>
+                    <div class="payment-details">
+                        <div class="payment-number" onclick="copyToClipboard('minat? makanya buy', 'OVO')">
+                            minat? makanya buy
+                        </div>
+                        <button class="copy-btn" onclick="copyToClipboard('minat? makanya buy', 'OVO')">
+                            <i class="fas fa-copy"></i> Copy OVO Info
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- QRIS -->
+                <div class="payment-card qris floating" style="animation-delay: 0.6s">
+                    <div class="payment-header">
+                        <div class="payment-icon">
+                            <i class="fas fa-qrcode"></i>
+                        </div>
+                        <div class="payment-title">QRIS Payment</div>
+                    </div>
+                    <div class="payment-details">
+                        <div class="qris-image-container">
+                            <img src="https://files.catbox.moe/booods.jpg" alt="QRIS Code" class="qris-image">
+                        </div>
+                        <button class="copy-btn" onclick="window.open('https://files.catbox.moe/booods.jpg', '_blank')">
+                            <i class="fas fa-expand"></i> Open QRIS Image
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3><i class="fas fa-info-circle"></i> Payment Instructions</h3>
+                <ol>
+                    <li>Click on the payment information or the copy button to copy</li>
+                    <li>Contact the seller to get the complete payment details</li>
+                    <li>For QRIS payments, open the image and scan with your banking app</li>
+                    <li>Always confirm payment with the seller</li>
+                    <li>Keep transaction receipts for verification</li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="footer">
+            &copy; 2023 PAYMENT BY JOJOSHOP. All rights reserved.
+        </div>
+    </div>
+    
+    <div class="copy-notification" id="copyNotification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationText">Copied to clipboard!</span>
+    </div>
+    
+    <script>
+        // Enhanced copy to clipboard function
+        function copyToClipboard(text, method) {
+            // Create temporary input element
+            const input = document.createElement('textarea');
+            input.value = text;
+            input.style.position = 'fixed';
+            input.style.opacity = 0;
+            document.body.appendChild(input);
+            input.select();
+            
+            try {
+                // Copy the text
+                const successful = document.execCommand('copy');
+                
+                // Show notification
+                const notification = document.getElementById('copyNotification');
+                const notificationText = document.getElementById('notificationText');
+                
+                if (successful) {
+                    notification.style.background = 'var(--success)';
+                    notificationText.textContent = `${method} info copied!`;
+                } else {
+                    notification.style.background = 'var(--error)';
+                    notificationText.textContent = 'Failed to copy. Please try again.';
+                }
+                
+                notification.classList.add('show');
+                
+                // Hide after 3 seconds
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+            } finally {
+                // Remove the temporary input
+                document.body.removeChild(input);
+            }
+            
+            // Prevent event bubbling if called from button
+            if (event) {
+                event.stopPropagation();
+                event.preventDefault();
+            }
+        }
+
+        // Create floating glow effects
+        document.addEventListener('mousemove', (e) => {
+            const glow = document.createElement('div');
+            glow.className = 'glow';
+            glow.style.left = `${e.clientX - 50}px`;
+            glow.style.top = `${e.clientY - 50}px`;
+            document.body.appendChild(glow);
+            
+            // Remove after animation completes
+            setTimeout(() => {
+                glow.style.opacity = '0';
+                glow.style.transition = 'opacity 1s ease';
+                setTimeout(() => {
+                    glow.remove();
+                }, 1000);
+            }, 300);
+        });
+
+        // Optimize for 60fps animations
+        document.addEventListener('DOMContentLoaded', () => {
+            // Use requestAnimationFrame for smooth animations
+            const animate = () => {
+                // Any continuous animations would go here
+                requestAnimationFrame(animate);
+            };
+            requestAnimationFrame(animate);
+        });
+    </script>
+</body>
+</html>
